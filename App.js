@@ -1,20 +1,74 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect} from "react"
+import { View, StyleSheet, Image, TouchableOpacity} from 'react-native'
+import Torch from "react-native-torch"
+import RNShake from 'react-native-shake'
+const App = () =>{
+  const [ toggle, setToggle ] = useState(false)
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+  const handleChangeToggle = () =>{
+    setToggle(oldToggle => !oldToggle)
+  }
+
+  useEffect(()=>{
+    //Liga Flash Celular
+    Torch.switchState(toggle)
+  },[toggle])
+
+  return(
+    <View style={toggle? style.container : style.containerLight}>
+      <TouchableOpacity onPress={handleChangeToggle}>
+        <Image
+        style={toggle ? style.lightingOff : style.lightingOn } 
+        source={
+          toggle
+          ? require('./assets/eco-light-off.png')
+          : require('./assets/eco-light.png')}
+        />
+        <Image
+        style={style.dioLogo} 
+        source={
+          toggle
+          ? require('./assets/logo-dio-white.png')
+          : require('./assets/logo-dio.png')}
+        />
+      </TouchableOpacity>
     </View>
-  );
+  )
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+export default App
+
+const style = StyleSheet.create({
+  container:{
+    flex:1,
+    backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+  containerLight:{
+    flex:1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lightingOn:{
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    width: 150,
+    height: 150
+  },
+  lightingOff:{
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    tintColor: 'white',
+    width: 150,
+    height: 150
+  },
+  dioLogo:{
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    width: 250,
+    height: 250
+  }
+})
