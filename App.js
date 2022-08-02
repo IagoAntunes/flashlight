@@ -13,7 +13,18 @@ const App = () =>{
     //Liga Flash Celular
     Torch.switchState(toggle)
   },[toggle])
-
+  useEffect(()=>{
+    /*
+    Quando o celular for chacolhado , o comando sera executado
+    */
+    const subscription = RNShake.addListener(()=>{
+      console.log("Chacolhou")
+      setToggle(oldToggle => !oldToggle)
+    });
+    //Quando esta funcao vai ser chamado quando o compo
+    //for desmontado
+    return () => subscription.remove()
+  },[]);
   return(
     <View style={toggle? style.container : style.containerLight}>
       <TouchableOpacity onPress={handleChangeToggle}>
